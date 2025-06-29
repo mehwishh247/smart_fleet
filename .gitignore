@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+*.env
+
+# Poetry-specific
+poetry.lock
+
+# VSCode / JetBrains IDEs / MacOS files
+.vscode/
+.idea/
+.DS_Store
+
+# Test cache
+.pytest_cache/
+.tox/
+
+# Logs and local configs
+*.log
+*.sqlite3
+*.db
+
+# Coverage and testing
+htmlcov/
+.coverage
+.cache
+
+# Compiled binary or C extensions
+build/
+dist/
+*.egg-info/

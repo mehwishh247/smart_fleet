@@ -1,0 +1,21 @@
+[project]
+name = "smart-fleet"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Mehwish",email = "39596277+mehwishh247@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi (>=0.115.14,<0.116.0)",
+    "uvicorn (>=0.34.3,<0.35.0)"
+]
+
+[tool.poetry]
+packages = [{include = "smart_fleet", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
