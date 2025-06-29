@@ -6,6 +6,10 @@ class VehicleCreate(BaseModel):
     status: str
     location: str | None = None
 
+class UpdateVehicle(BaseModel):
+    vehicle_type: str | None = None
+    status: str | None = None
+    location: str | None = None
 
 class VehicleResponse(VehicleCreate):
     vehicle_id: int
