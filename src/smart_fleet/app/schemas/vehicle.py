@@ -13,3 +13,5 @@ class UpdateVehicle(BaseModel):
 
 class VehicleResponse(VehicleCreate):
     vehicle_id: int
+    class Config:
+        orm_mode = True
