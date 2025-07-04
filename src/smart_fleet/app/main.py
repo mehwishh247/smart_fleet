@@ -7,21 +7,19 @@ from smart_fleet.app.routes.vehicle import vehicle_route
 from smart_fleet.app.routes.driver import driver_route
 from smart_fleet.app.routes.sensor import sensor_route
 
-def get_settings():
-    return Settings()
-
+settings = Settings()
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=settings.frontend_origins,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']
 )
 
 @app.get('/')
-def index(settings: Settings = Depends(get_settings)):
+def index(settings: Settings = Depends(settings)):
     return {'Project Name': settings.project_name}
 
 app.include_router(vehicle_route)
