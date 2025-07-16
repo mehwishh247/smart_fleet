@@ -1,15 +1,18 @@
 # Each vehicle has id, type, status, and location
 from pydantic import BaseModel
+from typing import Optional
 
 class VehicleCreate(BaseModel):
-    vehicle_type: str
-    status: str
-    location: str | None = None
+    vehicle_make: str
+    vehicle_model: str
+    year: int | None
+    vehicle_type: str | None
 
 class VehicleUpdate(BaseModel):
-    vehicle_type: str | None = None
-    status: str | None = None
-    location: str | None = None
+    vehicle_make: Optional[str]
+    vehicle_model: Optional[str]
+    year: Optional[int]
+    vehicle_type: Optional[str]
 
 class VehicleResponse(VehicleCreate):
     vehicle_id: int

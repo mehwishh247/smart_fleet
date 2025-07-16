@@ -21,7 +21,7 @@ def read_vehicle_json():
     with open('vehicle.json', 'r') as vehicle_json:
         return json.load(vehicle_json)
 
-vehicles_list = read_vehicle_json()
+# vehicles_list = read_vehicle_json()
 id_counter = len(vehicles_list)
 
 @vehicle_route.post('/vehicles', response_model=VehicleResponse, status_code=201)

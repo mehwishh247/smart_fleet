@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class DriverCreate(BaseModel):
+class Driver(BaseModel):
     name: str
     license_number: str
     status: str
