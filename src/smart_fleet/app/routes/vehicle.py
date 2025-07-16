@@ -1,6 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
+
 from smart_fleet.app.schemas.vehicle import VehicleCreate, VehicleUpdate, VehicleResponse
+from smart_fleet.app.models.vehicle import Vehicle
+from smart_fleet.app.db.vehicle_crud import create_vehicle_db, get_vehicle_db
 
 import json
 
@@ -26,18 +29,25 @@ id_counter = len(vehicles_list)
 
 @vehicle_route.post('/vehicles', response_model=VehicleResponse, status_code=201)
 def create_vehicles(vehicle: VehicleCreate):
-    global id_counter
-    new_vehicle = {'vehicle_id': id_counter, **vehicle.dict()}
-    id_counter += 1
+    new_vehicle = create_vehicle_db(Vehicle(**vehicle.model_dump()))
 
-    vehicles_list.append(new_vehicle)
-    save_vehicle_json()
-
+    if not new_vehicle:
+        raise HTTPException(
+            status_code=500,
+            detail="Something went wrong"
+        )
     return new_vehicle
 
-@vehicle_route.get('/vehicles', response_model=list[VehicleResponse], response_model_exclude_unset=True)
+@vehicle_route.get('/vehicles', response_model=list[VehicleResponse], response_model_exclude_unset=True, status_code=200)
 def get_vehicles():
-    return vehicles_list
+    vehicle_list = get_vehicle_db()
+    if vehicle_list is None:
+        raise HTTPException(
+            detail="Something went wrong while loading data",
+            status_code=500
+        )
+
+    return vehicle_list
 
 @vehicle_route.get('/vehicle/{vehicle_id}', response_model=VehicleResponse, response_model_exclude_unset=True)
 def find_vehicle(vehicle_id: int):
