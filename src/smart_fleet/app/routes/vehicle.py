@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from smart_fleet.app.schemas.vehicle import VehicleCreate, VehicleUpdate, VehicleResponse
 from smart_fleet.app.models.vehicle import Vehicle
-from smart_fleet.app.db.vehicle_crud import create_vehicle_db, get_vehicle_db
+from smart_fleet.app.db.vehicle_crud import create_vehicle_db, get_vehicles_db, get_vehicle_by_id
 
 import json
 
@@ -40,7 +40,7 @@ def create_vehicles(vehicle: VehicleCreate):
 
 @vehicle_route.get('/vehicles', response_model=list[VehicleResponse], response_model_exclude_unset=True, status_code=200)
 def get_vehicles():
-    vehicle_list = get_vehicle_db()
+    vehicle_list = get_vehicles_db()
     if vehicle_list is None:
         raise HTTPException(
             detail="Something went wrong while loading data",
@@ -51,11 +51,12 @@ def get_vehicles():
 
 @vehicle_route.get('/vehicle/{vehicle_id}', response_model=VehicleResponse, response_model_exclude_unset=True)
 def find_vehicle(vehicle_id: int):
-    vehicle = find_vehicle_by_id(vehicle_id)
-    if vehicle:
-        return vehicle
-        
-    raise HTTPException(404, detail='Vehicle not found!')
+    vehicle = get_vehicle_by_id(vehicle_id=vehicle_id)
+    if vehicle == {}:
+        raise HTTPException(404, detail='Vehicle not found!')    
+    
+    if vehicle is None:
+        raise HTTPException(500, detail="Something went wrong while fetching data from database.")
 
 @vehicle_route.put('/vehicle/{vehicle_id}', response_model=VehicleResponse, status_code=200)
 def update_vehicle(vehicle_id: int, updated_vehicle: VehicleUpdate):
