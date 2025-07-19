@@ -9,10 +9,10 @@ class VehicleCreate(BaseModel):
     vehicle_type: str | None
 
 class VehicleUpdate(BaseModel):
-    vehicle_make: Optional[str]
-    vehicle_model: Optional[str]
-    year: Optional[int]
-    vehicle_type: Optional[str]
+    vehicle_make: Optional[str] = None
+    vehicle_model: Optional[str] = None
+    year: Optional[int] = None
+    vehicle_type: Optional[str] = None
 
 class VehicleResponse(VehicleCreate):
     vehicle_id: int
