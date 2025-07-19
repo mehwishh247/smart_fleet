@@ -1,5 +1,5 @@
 import logging
-from fastapi import HTTPException
+from fastapi.responses import JSONResponse
 from sqlmodel import Session
 from sqlmodel import select, update, delete
 
@@ -43,9 +43,7 @@ def get_vehicles_db():
 def get_vehicle_by_id_db(vehicle_id: int):
     try:
         with Session(get_engine()) as session:
-            query = select(Vehicle).where(Vehicle.vehicle_id == vehicle_id)
-            result = session.exec(statement=query)        
-            vehicle = result.first()
+            vehicle = session.get(Vehicle, vehicle_id)
 
             if not vehicle:
                 logger.info(f'No vehicle found with if: {vehicle_id}')
@@ -62,14 +60,12 @@ def update_vehicle_db(vehicle_id: int, vehicle: VehicleUpdate):
         with Session(get_engine()) as session:
             vehicle_for_update = session.get(Vehicle, vehicle_id)
 
-            print("\n\nVehicle found\n\n")
-
             if not vehicle_for_update:
                 logger.info(f'No vehicle found with if: {vehicle_id}')
                 return {}
 
             vehicle_for_update.sqlmodel_update(vehicle.model_dump(exclude_unset=True))
-            print(f"\n\nupdated here... {vehicle_for_update.model_dump()}\n\n")
+
             session.add(vehicle_for_update)
             session.commit()
             session.refresh(vehicle_for_update)
@@ -77,9 +73,26 @@ def update_vehicle_db(vehicle_id: int, vehicle: VehicleUpdate):
             return vehicle_for_update
 
     except Exception as e:
-        print("\n\nProblem with DB\n\n")
         logger.error("Error fetching data from database", exc_info=e)
         return None
 
-def delete_vehicle():
-    pass
+def delete_vehicle_db(vehicle_id: int):
+    try:
+        with Session(get_engine()) as session:
+            vehicle = session.get(Vehicle, vehicle_id)
+
+            if not vehicle:
+                logger.info(f'No vehicle found with if: {vehicle_id}')
+                return {}
+            
+            session.delete(vehicle)
+            session.commit()
+
+            return JSONResponse(
+            content={
+                'message': f'Vehicle with id: {vehicle_id} removed'
+            })
+
+    except Exception as e:
+        logger.error("Error fetching data from database", exc_info=e)
+        return None
