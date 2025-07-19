@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from smart_fleet.app.schemas.vehicle import VehicleCreate, VehicleUpdate, VehicleResponse
 from smart_fleet.app.models.vehicle import Vehicle
-from smart_fleet.app.db.vehicle_crud import create_vehicle_db, get_vehicles_db, get_vehicle_by_id
+from smart_fleet.app.db.vehicle_crud import create_vehicle_db, get_vehicles_db, get_vehicle_by_id_db, update_vehicle_db
 
 import json
 
@@ -51,32 +51,26 @@ def get_vehicles():
 
 @vehicle_route.get('/vehicle/{vehicle_id}', response_model=VehicleResponse, response_model_exclude_unset=True)
 def find_vehicle(vehicle_id: int):
-    vehicle = get_vehicle_by_id(vehicle_id=vehicle_id)
+    vehicle = get_vehicle_by_id_db(vehicle_id=vehicle_id)
     if vehicle == {}:
         raise HTTPException(404, detail='Vehicle not found!')    
     
     if vehicle is None:
         raise HTTPException(500, detail="Something went wrong while fetching data from database.")
+    
+    return VehicleResponse(**vehicle.model_dump())
 
 @vehicle_route.put('/vehicle/{vehicle_id}', response_model=VehicleResponse, status_code=200)
 def update_vehicle(vehicle_id: int, updated_vehicle: VehicleUpdate):
-    vehicle = find_vehicle_by_id(vehicle_id)
-
+    print('Entered the route')
+    vehicle = update_vehicle_db(vehicle_id=vehicle_id, vehicle=updated_vehicle)
+    print('returned from db helper')
+    if vehicle == {}:
+        raise HTTPException(404, detail='Vehicle not found!')    
+    
     if vehicle is None:
-        raise HTTPException(404, detail='Vehicle not found!')
+        raise HTTPException(500, detail="Something went wrong while fetching data from database.")
     
-    update_position = vehicles_list.index(vehicle)
-    vehicles_list.remove(vehicle)
-    
-    for key, value in updated_vehicle.model_dump().items():
-        if value is None:
-            continue
-
-        vehicle[key] = value
-
-    vehicles_list.insert(update_position, vehicle)
-    save_vehicle_json()
-
     return vehicle
 
 @vehicle_route.delete('/vehicle/{vehicle_id}', status_code=202)
