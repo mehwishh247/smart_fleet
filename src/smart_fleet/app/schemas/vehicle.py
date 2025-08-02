@@ -1,18 +1,19 @@
 # Each vehicle has id, type, status, and location
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
+from smart_fleet.app.schemas.enums import VehicleTypes, VehicleMakes
 
 class VehicleCreate(BaseModel):
-    vehicle_make: str
+    vehicle_make: VehicleMakes
     vehicle_model: str
-    year: int | None
-    vehicle_type: str | None
+    year: Optional[int] = Field(..., ge=1970, le=2025)
+    vehicle_type: Optional[VehicleTypes] = None
 
 class VehicleUpdate(BaseModel):
-    vehicle_make: Optional[str] = None
+    vehicle_make: Optional[VehicleMakes] = None
     vehicle_model: Optional[str] = None
     year: Optional[int] = None
-    vehicle_type: Optional[str] = None
+    vehicle_type: Optional[VehicleTypes] = None
 
 class VehicleResponse(VehicleCreate):
     vehicle_id: int
