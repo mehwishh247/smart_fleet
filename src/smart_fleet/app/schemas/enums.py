@@ -20,3 +20,8 @@ class VehicleMakes(str, Enum):
     bmw = 'BMW'
     chevrolet = 'Chevrolet'
 
+class DriverStatus(str, Enum):
+    active = 'Active'
+    inactive = 'Inactive'
+    suspended = 'Suspended'
+    
