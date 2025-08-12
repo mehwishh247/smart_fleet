@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Depends
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from sqlmodel import SQLModel
 
 from smart_fleet.app.core.config import Settings
 from smart_fleet.app.core.database import create_db_and_tables
