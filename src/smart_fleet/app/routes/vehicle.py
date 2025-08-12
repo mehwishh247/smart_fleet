@@ -8,8 +8,6 @@ from smart_fleet.app.db.vehicle_crud import create_vehicle_db, get_vehicles_db, 
 import json
 
 vehicle_route = APIRouter()
-vehicles_list = []
-id_counter = 1
 
 @vehicle_route.post('/vehicles', response_model=VehicleResponse, status_code=201)
 def create_vehicles(vehicle: VehicleCreate):
