@@ -4,7 +4,7 @@ from sqlmodel import select
 
 from smart_fleet.app.core.database import get_engine
 from smart_fleet.app.models.driver import Driver
-from smart_fleet.app.schemas.driver import DriverCreate, DriverUpdate
+from smart_fleet.app.schemas.driver import DriverUpdate
 
 def create_driver_db(driver: Driver):
     with Session(get_engine()) as session:
