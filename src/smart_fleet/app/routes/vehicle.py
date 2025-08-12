@@ -11,22 +11,6 @@ vehicle_route = APIRouter()
 vehicles_list = []
 id_counter = 1
 
-def find_vehicle_by_id(vehicle_id: int):
-    for vehicle in vehicles_list:
-        if vehicle['vehicle_id'] == vehicle_id:
-            return vehicle
-        
-def save_vehicle_json():
-    with open('vehicle.json', 'w') as vehicle_json:
-        json.dump(vehicles_list, vehicle_json, indent=2)
-
-def read_vehicle_json():
-    with open('vehicle.json', 'r') as vehicle_json:
-        return json.load(vehicle_json)
-
-# vehicles_list = read_vehicle_json()
-id_counter = len(vehicles_list)
-
 @vehicle_route.post('/vehicles', response_model=VehicleResponse, status_code=201)
 def create_vehicles(vehicle: VehicleCreate):
     new_vehicle = create_vehicle_db(Vehicle(**vehicle.model_dump()))
