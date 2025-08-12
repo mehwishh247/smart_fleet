@@ -1,4 +1,5 @@
 from sqlmodel import SQLModel, Field
+from smart_fleet.app.schemas.enums import DriverStatus
 from typing import Optional
 
 class DriverBase(SQLModel):
@@ -6,7 +7,7 @@ class DriverBase(SQLModel):
     license_number: str = Field(..., min_length=5, max_length=10, unique=True)
     phone: Optional[str] = None
     email: str = Field(..., unique=True, index=True)
-    status: str
+    status: DriverStatus
 
 class Driver(DriverBase, table=True):
     driver_id: int = Field(default=None, primary_key=True, index=True)
