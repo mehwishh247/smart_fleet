@@ -22,7 +22,7 @@ def get_drivers_db():
     with Session(get_engine()) as session:
         try:
             statement = select(Driver)
-            drivers = session.execute(statement=statement).all()
+            drivers = session.exec(statement=statement).all()
 
             if drivers == []:
                 print('\n[LOG]: No data to show\n. Driver table is empty')
@@ -40,6 +40,8 @@ def get_driver_by_id_db(driver_id: int):
             if not driver:
                 print('LOG: No driver with given ID found')
                 return {}
+            
+            return driver
             
         except Exception as e:
             print('LOG: Error fetching data from DB')
@@ -69,7 +71,7 @@ def update_driver_db(driver_id: int, driver: DriverUpdate):
 def delete_driver_db(driver_id: int):
     try:
         with Session(get_engine()) as session:
-            driver = session.get(driver, driver_id)
+            driver = session.get(Driver, driver_id)
 
             if not driver:
                 print(f'[LOG: No driver found with id: {driver_id}')

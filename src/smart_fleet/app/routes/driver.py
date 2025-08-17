@@ -53,7 +53,7 @@ def find_driver(driver_id: int):
 def update_driver(driver_id: int, updated_driver: DriverUpdate):
     driver = update_driver_db(driver_id=driver_id, driver=updated_driver)
 
-    if driver is {}:
+    if driver == {}:
         raise HTTPException(404, detail="Driver's data not found!")
     
     elif driver is None:
