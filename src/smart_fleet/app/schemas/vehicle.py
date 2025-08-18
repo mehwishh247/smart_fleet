@@ -1,7 +1,7 @@
 # Each vehicle has id, type, status, and location
 from pydantic import BaseModel, Field
 from typing import Optional
-from smart_fleet.app.schemas.enums import VehicleTypes, VehicleMakes
+from smart_fleet.app.enums import VehicleTypes, VehicleMakes
 
 class VehicleCreate(BaseModel):
     vehicle_make: VehicleMakes

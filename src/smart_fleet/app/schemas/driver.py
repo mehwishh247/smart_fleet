@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
-from smart_fleet.app.schemas.enums import DriverStatus
+from smart_fleet.app.enums import DriverStatus
 
 class DriverBase(BaseModel):
     name: str
