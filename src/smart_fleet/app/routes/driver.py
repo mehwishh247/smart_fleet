@@ -61,7 +61,7 @@ def update_driver(driver_id: int, updated_driver: DriverUpdate):
 
     return driver
 
-# @driver_route.delete('/driver/{license_number}', status_code=202)
+@driver_route.delete('/driver/{driver_id}', status_code=202)
 def delete_driver_by_id(driver_id: int):
     response = delete_driver_db(driver_id=driver_id)
 
