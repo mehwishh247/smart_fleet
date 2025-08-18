@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field
-from smart_fleet.app.schemas.enums import DriverStatus
+from smart_fleet.app.enums import DriverStatus
 from typing import Optional
 
 class DriverBase(SQLModel):

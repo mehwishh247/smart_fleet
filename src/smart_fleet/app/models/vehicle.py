@@ -1,7 +1,7 @@
 from sqlmodel import Field, SQLModel
 from typing import Optional
 
-from smart_fleet.app.schemas.enums import VehicleMakes, VehicleTypes
+from smart_fleet.app.enums import VehicleMakes, VehicleTypes
 
 class VehicleBase(SQLModel):
     vehicle_make: VehicleMakes
