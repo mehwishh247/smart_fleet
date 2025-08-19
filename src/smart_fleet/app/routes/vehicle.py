@@ -1,11 +1,9 @@
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
 
+from smart_fleet.app.enums import VehicleMakes, VehicleTypes
 from smart_fleet.app.schemas.vehicle import VehicleCreate, VehicleUpdate, VehicleResponse
 from smart_fleet.app.models.vehicle import Vehicle
 from smart_fleet.app.db.vehicle_crud import create_vehicle_db, get_vehicles_db, get_vehicle_by_id_db, update_vehicle_db, delete_vehicle_db
-
-import json
 
 vehicle_route = APIRouter()
 
@@ -21,8 +19,17 @@ def create_vehicles(vehicle: VehicleCreate):
     return new_vehicle
 
 @vehicle_route.get('/vehicles', response_model=list[VehicleResponse], response_model_exclude_unset=True, status_code=200)
-def get_vehicles():
-    vehicle_list = get_vehicles_db()
+def get_vehicles(vehicle_make: VehicleMakes | None = None,
+                 vehicle_model: VehicleTypes | None = None,
+                 year: int | None = None,
+                 vehicle_type: str | None = None
+                 ):
+    vehicle_list = get_vehicles_db(vehicle_make=vehicle_make,
+                                   vehicle_model=vehicle_model,
+                                   year=year,
+                                   vehicle_type=vehicle_type)
+    if vehicle_list == []:
+        raise HTTPException(status_code=404, detail='No data to show. Vehicle table is empty')
     if vehicle_list is None:
         raise HTTPException(
             detail="Something went wrong while loading data",

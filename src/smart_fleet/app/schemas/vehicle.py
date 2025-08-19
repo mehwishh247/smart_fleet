@@ -4,9 +4,9 @@ from typing import Optional
 from smart_fleet.app.enums import VehicleTypes, VehicleMakes
 
 class VehicleCreate(BaseModel):
-    vehicle_make: VehicleMakes
+    vehicle_make: VehicleMakes = Field(..., description='Vehicle Manufacturer')
     vehicle_model: str
-    year: Optional[int] = Field(..., ge=1970, le=2025)
+    year: int | None = Field(..., ge=1970, le=2025)
     vehicle_type: Optional[VehicleTypes] = None
 
 class VehicleUpdate(BaseModel):

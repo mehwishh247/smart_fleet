@@ -1,7 +1,7 @@
 import logging
 from fastapi.responses import JSONResponse
 from sqlmodel import Session
-from sqlmodel import select, update, delete
+from sqlmodel import select
 
 from smart_fleet.app.core.database import get_engine
 from smart_fleet.app.models.vehicle import Vehicle
@@ -23,14 +23,31 @@ def create_vehicle_db(vehicle: Vehicle):
         
     except Exception as e:
         logger.error('Error inserting new row into table Vehicle', exc_info=e)
+        print('\nError Inserting data in table at DB level\n')
         return None
 
-def get_vehicles_db():
+def get_vehicles_db(vehicle_make: str | None = None,
+                 vehicle_model: str | None = None,
+                 year: int | None = None,
+                 vehicle_type: str | None = None):
     try:
         with Session(get_engine()) as session:
             statement = select(Vehicle)
-            result = session.exec(statement=statement)
-            vehicle_list = result.all()
+
+            if vehicle_make:
+                statement = statement.where(Vehicle.vehicle_make == vehicle_make)
+
+            if vehicle_model:
+                statement = statement.where(Vehicle.vehicle_model == vehicle_model)
+
+            if year:
+                statement = statement.where(Vehicle.year == year)
+
+            if vehicle_type:
+                statement = statement.where(Vehicle.vehicle_type == vehicle_type)
+
+            vehicle_list = session.exec(statement=statement).all()
+
             if vehicle_list == []:
                 logger.info("No data to show. Table 'vehicle' is empty")
 
@@ -50,7 +67,7 @@ def get_vehicle_by_id_db(vehicle_id: int):
                 return {}
 
             return vehicle
-        
+
     except Exception as e:
         logger.error("Error fetching data from database", exc_info=e)
         return None
@@ -61,7 +78,7 @@ def update_vehicle_db(vehicle_id: int, vehicle: VehicleUpdate):
             vehicle_for_update = session.get(Vehicle, vehicle_id)
 
             if not vehicle_for_update:
-                logger.info(f'No vehicle found with if: {vehicle_id}')
+                logger.info(f'No vehicle found with id: {vehicle_id}')
                 return {}
 
             vehicle_for_update.sqlmodel_update(vehicle.model_dump(exclude_unset=True))
@@ -82,7 +99,7 @@ def delete_vehicle_db(vehicle_id: int):
             vehicle = session.get(Vehicle, vehicle_id)
 
             if not vehicle:
-                logger.info(f'No vehicle found with if: {vehicle_id}')
+                logger.info(f'No vehicle found with id: {vehicle_id}')
                 return {}
             
             session.delete(vehicle)
