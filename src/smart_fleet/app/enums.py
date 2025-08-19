@@ -1,27 +1,27 @@
 from enum import Enum
 
 class VehicleTypes(str, Enum):
-    sedan = 'Sedan'
-    hatchback = 'Hatchback'
-    coupe = 'Coupe'
-    convertible = 'Convertible'
-    suv = 'SUV'
-    crossback = 'Crossback'
-    pickup = 'Pickup Truck'
-    minivan = 'Minivan'
-    wagon = 'Station Wagon'
+    SEDAN = 'sedan'
+    HATCHBACK = 'hatchback'
+    COUPE = 'coupe'
+    CONVERTIBLE = 'convertible'
+    SUV = 'suv'
+    CROSSBACK = 'crossback'
+    PICKUP = 'pickup_truck'
+    MINIVAN = 'minivan'
+    WAGON = 'station_wagon'
 
 class VehicleMakes(str, Enum):
-    honda = 'Honda'
-    toyota = 'Toyota'
-    tesla = 'Tesla'
-    ford = 'Ford'
-    chrysler = 'Chrysler'
-    bmw = 'BMW'
-    chevrolet = 'Chevrolet'
+    HONDA = 'honda'
+    TOYOTA = 'toyota'
+    TESLA = 'tesla'
+    FORD = 'ford'
+    CHRYSLER = 'chrysler'
+    BMW = 'bmw'
+    CHEVROLET = 'chevrolet'
 
 class DriverStatus(str, Enum):
-    active = 'Active'
-    inactive = 'Inactive'
-    suspended = 'Suspended'
+    ACTIVE = 'active'
+    INACTIVE = 'inactive'
+    SUSPENDED = 'suspended'
     
