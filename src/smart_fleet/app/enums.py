@@ -24,4 +24,12 @@ class DriverStatus(str, Enum):
     ACTIVE = 'active'
     INACTIVE = 'inactive'
     SUSPENDED = 'suspended'
-    
+
+class SensorTypes(str, Enum):
+    GPS = 'gps'
+    OBD = 'obd'
+    TPMS = 'tpms'
+    ACCELEROMETER = 'accelerometer'
+    GYROSCOPE = 'gyroscope'
+    DSRC = 'dsrc'
+
