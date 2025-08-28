@@ -18,7 +18,7 @@ class SensorCreate(BaseModel):
     is_active: bool
     last_reading: float | None = None
     last_reading_time: datetime | None = None
-    installed_at: datetime | None = Field(default_factory=datetime.now())
+    installed_at: datetime | None = Field(default_factory=datetime.now)
 
 class SensorUpdate(BaseModel):
     name: str | None  = None
