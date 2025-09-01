@@ -5,6 +5,15 @@ from smart_fleet.app.schemas.vehicle import VehicleCreate, VehicleUpdate, Vehicl
 from smart_fleet.app.models.vehicle import Vehicle
 from smart_fleet.app.db.vehicle_crud import create_vehicle_db, get_vehicles_db, get_vehicle_by_id_db, update_vehicle_db, delete_vehicle_db
 
+from smart_fleet.app.services.sensor_service import add_sensor_to_vehicle
+
+from smart_fleet.app.enums import SensorTypes
+from smart_fleet.app.schemas.sensor import SensorCreate, SensorUpdate, SensorResponse
+from smart_fleet.app.models.sensor import Sensor
+from smart_fleet.app.db.sensor_crud import create_sensor
+
+from datetime import datetime
+
 vehicle_route = APIRouter()
 
 @vehicle_route.post('/vehicles', response_model=VehicleResponse, status_code=201)
@@ -38,7 +47,7 @@ def get_vehicles(vehicle_make: VehicleMakes | None = None,
 
     return vehicle_list
 
-@vehicle_route.get('/vehicle/{vehicle_id}', response_model=VehicleResponse, response_model_exclude_unset=True)
+@vehicle_route.get('/vehicles/{vehicle_id}', response_model=VehicleResponse, response_model_exclude_unset=True)
 def find_vehicle(vehicle_id: int):
     vehicle = get_vehicle_by_id_db(vehicle_id=vehicle_id)
     if vehicle == {}:
@@ -49,11 +58,10 @@ def find_vehicle(vehicle_id: int):
     
     return VehicleResponse(**vehicle.model_dump())
 
-@vehicle_route.put('/vehicle/{vehicle_id}', response_model=VehicleResponse, status_code=200)
+@vehicle_route.put('/vehicles/{vehicle_id}', response_model=VehicleResponse, status_code=200)
 def update_vehicle(vehicle_id: int, updated_vehicle: VehicleUpdate):
-    print('Entered the route')
     vehicle = update_vehicle_db(vehicle_id=vehicle_id, vehicle=updated_vehicle)
-    print('returned from db helper')
+
     if vehicle == {}:
         raise HTTPException(404, detail='Vehicle not found!')    
     
@@ -62,7 +70,7 @@ def update_vehicle(vehicle_id: int, updated_vehicle: VehicleUpdate):
     
     return vehicle
 
-@vehicle_route.delete('/vehicle/{vehicle_id}', status_code=202)
+@vehicle_route.delete('/vehicles/{vehicle_id}/', status_code=202)
 def delete_vehicle_by_id(vehicle_id: int):
     response = delete_vehicle_db(vehicle_id=vehicle_id)
 
@@ -73,3 +81,31 @@ def delete_vehicle_by_id(vehicle_id: int):
         raise HTTPException(status_code=500, detail="Something went wrong while deleting data from database")
     
     return response
+
+# Sensor related routes
+'''
+GET /vehicles/{vehicle_id}/sensors/ → list sensors of a vehicle
+
+POST /vehicles/{vehicle_id}/sensors/ → add a new sensor to vehicle
+
+GET /vehicles/{vehicle_id}/sensors/{sensor_id} → get sensor details
+
+PUT /vehicles/{vehicle_id}/sensors/{sensor_id} → update sensor
+
+DELETE /vehicles/{vehicle_id}/sensors/{sensor_id} → remove/deactivate sensor
+'''
+
+@vehicle_route.get('/vehicles/{vehicle_id}/sensors/', response_model=list[Sensor])
+def get_vehicle_sensor(vehicle_id: int, sensor: SensorCreate,
+                       name: str | None  = None,
+                        sensor_type: SensorTypes | None  = None,
+                        is_active: bool | None  = None,
+                        last_reading: float | None  = None,
+                        last_reading_time: datetime | None  = None,
+                        installed_at: datetime | None = None):
+    
+    pass
+
+@vehicle_route.post('/vehicles/{vehicle_id}/sensors/')
+def add_sensor(vehicle_id: int, sensor: SensorCreate):
+    return add_sensor_to_vehicle(vehicle_id=vehicle_id, sensor=sensor)

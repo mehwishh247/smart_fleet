@@ -1,4 +1,5 @@
 import logging
+from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from sqlmodel import Session
 from sqlmodel import select
@@ -69,8 +70,7 @@ def get_vehicle_by_id_db(vehicle_id: int):
             return vehicle
 
     except Exception as e:
-        logger.error("Error fetching data from database", exc_info=e)
-        return None
+        raise HTTPException(500, details="Error while fetching data from DB")
 
 def update_vehicle_db(vehicle_id: int, vehicle: VehicleUpdate):
     try:
